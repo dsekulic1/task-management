@@ -1,0 +1,44 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: task-management
+  datasource:
+    url: ${DB_URL:jdbc:h2:mem:taskmanagementdb}
+    driver-class-name: org.h2.Driver
+    username: ${DB_USERNAME:admin}
+    password: ${DB_PASSWORD:admin}
+  mail:
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        transport:
+          protocol: ${MAIL_PROTOCOL:smtp}
+        smtp:
+          auth: ${MAIL_AUTH:true}
+          starttls:
+            enable: ${MAIL_STARTTLS:true}
+        debug: false
+  h2:
+    console:
+      enabled: true
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+admin:
+  username: ${USER_USERNAME:admin}
+  password: ${USER_PASSWORD:admin}
+
+# notification scheduler time in milliseconds
+task:
+  notification:
+    low: ${NOTIFICATION_LOW:300000}
+    medium: ${NOTIFICATION_MEDIUM:180000}
+    high: ${NOTIFICATION_HIGH:60000}

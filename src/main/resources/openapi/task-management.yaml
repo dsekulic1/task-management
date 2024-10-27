@@ -1,0 +1,202 @@
+openapi: 3.0.0
+info:
+  title: task-management
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+components:
+  schemas:
+    TasksResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: "./schemas/task/TaskDto.yaml"
+        totalElements:
+          type: integer
+        totalPages:
+          type: integer
+        page:
+          type: integer
+        size:
+          type: integer
+paths:
+  /api/v1/tasks:
+    get:
+      operationId: "GetAllTasks"
+      summary: "Retrieve all tasks with optional filtering and sorting."
+      tags:
+        - taskManagement
+      parameters:
+        - name: status
+          in: query
+          description: "Filter tasks by status (e.g., completed, pending)."
+          required: false
+          schema:
+            type: string
+        - name: sort
+          in: query
+          description: "Sort tasks by a specified field and order (asc or desc)."
+          required: false
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: "The page number to retrieve (0-based)."
+          required: false
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          description: "The number of items per page."
+          required: false
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: "A list of tasks"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TasksResponse"
+        default:
+          description: "Error occurred while processing request"
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/common/ErrorDto.yaml"
+    post:
+      operationId: "CreateTask"
+      summary: "Create a new task."
+      tags:
+        - taskManagement
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "./schemas/task/TaskDto.yaml"
+      responses:
+        '201':
+          description: "Task created successfully"
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/task/TaskDto.yaml"
+        '400':
+          description: "Invalid input provided"
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/common/ErrorDto.yaml"
+        default:
+          description: "Error occurred while processing request"
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/common/ErrorDto.yaml"
+  /api/v1/tasks/{id}:
+    put:
+      operationId: "UpdateTask"
+      summary: "Update an existing task."
+      tags:
+        - taskManagement
+      parameters:
+        - name: id
+          in: path
+          description: "The ID of the task to update."
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "./schemas/task/TaskDto.yaml"
+      responses:
+        '200':
+          description: "Task updated successfully"
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/task/TaskDto.yaml"
+        '404':
+          description: "Task not found"
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/common/ErrorDto.yaml"
+        '400':
+          description: "Invalid input provided"
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/common/ErrorDto.yaml"
+        default:
+          description: "Error occurred while processing request"
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/common/ErrorDto.yaml"
+    delete:
+      operationId: "DeleteTask"
+      summary: "Delete a task."
+      tags:
+        - taskManagement
+      parameters:
+        - name: id
+          in: path
+          description: "The ID of the task to delete."
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: "Task deleted successfully"
+        '404':
+          description: "Task not found"
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/common/ErrorDto.yaml"
+        default:
+          description: "Error occurred while processing request"
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/common/ErrorDto.yaml"
+  /api/v1/tasks/{id}/complete:
+    patch:
+      operationId: "CompleteTask"
+      summary: "Mark a task as completed."
+      tags:
+        - taskManagement
+      parameters:
+        - name: id
+          in: path
+          description: "The ID of the task to mark as completed."
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: "Task marked as completed successfully"
+        '404':
+          description: "Task not found"
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/common/ErrorDto.yaml"
+        default:
+          description: "Error occurred while processing request"
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/common/ErrorDto.yaml"

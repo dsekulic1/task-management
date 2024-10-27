@@ -1,0 +1,43 @@
+openapi: 3.0.0
+info:
+  title: notification-config
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+components:
+  schemas:
+    NotificationConfigRequest:
+      type: object
+      properties:
+        statuses:
+          type: array
+          items:
+            type: string
+paths:
+  /api/v1/config/status-notifications:
+    post:
+      operationId: "configureStatusNotifications"
+      summary: "Configure which task statuses trigger notifications."
+      tags:
+        - notificationConfig
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NotificationConfigRequest"
+      responses:
+        '204':
+          description: "Notification status configured or notifications will be sent for all statuses."
+        '400':
+          description: "Invalid input provided"
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/common/ErrorDto.yaml"
+        default:
+          description: "Error occurred while processing request"
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/common/ErrorDto.yaml"

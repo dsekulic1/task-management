@@ -1,0 +1,24 @@
+version: '3'
+services:
+  taskmanagement:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8282:8282"
+    environment:
+      - DB_URL=jdbc:h2:mem:taskmanagementdb
+      - DB_USERNAME=admin
+      - DB_PASSWORD=admin
+      - MAIL_HOST=smtp.gmail.com
+      - MAIL_PORT=587
+      - MAIL_USERNAME=
+      - MAIL_PASSWORD=
+      - MAIL_PROTOCOL=smtp
+      - MAIL_AUTH=true
+      - MAIL_STARTTLS=true
+      - USER_USERNAME=admin
+      - USER_PASSWORD=admin
+      - NOTIFICATION_LOW=300000
+      - NOTIFICATION_MEDIUM=180000
+      - NOTIFICATION_HIGH=60000
